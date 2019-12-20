@@ -1,0 +1,43 @@
+<script src="../../dist/vue.global.js"></script>
+
+<div id="demo">
+  <child v-for="obj in objs" :obj="obj">{{obj.value}}</child>
+  <button @click="update">add</button>
+  <button @click="remove">ddd</button>
+</div>
+
+<script>
+const Child = {
+  template: '<h1>{{obj.value}}</h1>',
+  props: ['obj'],
+  mounted() {
+    if (this.obj.value === 1) {
+      window.cc = this
+    }
+    console.log(this.obj, 'm')
+  },
+  updated() {
+    console.log(this.obj)
+  }
+}
+const App = {
+  components: { Child },
+  data() {
+    return {
+      objs: [
+        { value: 1 },
+        { value: 2 },
+      ]
+    }
+  },
+  methods: {
+    update() {
+      this.objs[0].value++
+    },
+    remove() {
+      this.objs.pop()
+    }
+  }
+}
+Vue.createApp().mount(App, '#demo')
+</script>

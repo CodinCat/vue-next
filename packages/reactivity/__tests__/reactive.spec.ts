@@ -111,6 +111,18 @@ describe('reactivity/reactive', () => {
     expect(observed2).toBe(observed)
   })
 
+  test('nested reactive object are still reactive after mutation', () => {
+    const observed = reactive({
+      foo: reactive({ bar: 1 })
+    })
+    const container: any = reactive({ value: reactive({}) })
+    observed.foo = reactive({ bar: 2 })
+    container.value = observed.foo
+    expect(isReactive(container)).toBe(true)
+    expect(isReactive(container.value)).toBe(true)
+    expect(isReactive(observed.foo)).toBe(true)
+  })
+
   test('should not pollute original object with Proxies', () => {
     const original: any = { foo: 1 }
     const original2 = { bar: 2 }
